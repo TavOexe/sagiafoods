@@ -11,11 +11,13 @@
     display: flex;
     align-items: center;
     animation: fade-in 3s forwards;
-    padding-left: 50px;
+    padding-left: 20px;
 }
 
 .logo-header img { 
     width: 250px;
+    max-width: fit-content;
+    margin-left: -100px;
 }
 
 .logo {
@@ -81,7 +83,7 @@ img{
 
 .menu .navbar ul li{
     position: relative;
-    float: left;
+    float: left;;
 }
 
 .menu .navbar ul li a{
@@ -90,6 +92,7 @@ img{
     color: #fEfEfE;
     display: block;
     font-weight: 600;
+
 }
 
 #menu{
