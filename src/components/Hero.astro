@@ -1,50 +1,44 @@
 ---
 import { Picture } from 'astro:assets';
-import cebolla from '../assets/images/cultivos/cultivo-cebolla.jpg';
-import tomate from '../assets/images/cultivos/cultivo-tomate.jpg';
-import pimiento from '../assets/images/cultivos/cultivo-pimiento.jpg';
-import papa from '../assets/images/cultivos/cultivo-papa.jpg';
-
-// El original tenía un 5.º slide con "PLANTIN DE TOMATE.JPG", que no existe en el repo.
-// Para añadirlo: copia la foto a src/assets/images/cultivos/, impórtala y agrégala aquí.
-const slides = [
-  { src: cebolla, alt: 'Cultivo de cebolla' },
-  { src: tomate, alt: 'Cultivo de tomate' },
-  { src: pimiento, alt: 'Cultivo de pimiento' },
-  { src: papa, alt: 'Cultivo de papa' },
-];
+import lechuga from '../assets/images/cultivos/cultivo-lechuga.jpg';
 ---
 
-<div class="header-content container">
-  <div class="header-txt">
-    <span>Ofertas</span>
-    <h1>Verduras de calidad</h1>
-    <p>
-      SagiaFoods Perú es una empresa líder en la venta de hortalizas y verduras de alta calidad,
-      directamente desde los campos de Perú. Nos enorgullecemos de ofrecer productos frescos y
-      nutritivos a nuestros clientes en Lima y sus alrededores.
-    </p>
-    <a href="#" class="btn-1">Información</a>
-  </div>
-  <div class="header-img">
-    <div class="slider">
-      <div class="slides">
-        {
-          slides.map((slide, i) => (
-            <div id={`slide-${i + 1}`}>
-              <Picture
-                src={slide.src}
-                formats={['avif', 'webp']}
-                widths={[300, 600]}
-                sizes="300px"
-                alt={slide.alt}
-                loading={i === 0 ? 'eager' : 'lazy'}
-                fetchpriority={i === 0 ? 'high' : 'auto'}
-              />
-            </div>
-          ))
-        }
+<section id="inicio" class="hero">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow hero-anim" style="--d: 0">Hortalizas frescas · Lima, Perú</p>
+      <h1 class="hero-title">
+        <span class="line"><span style="--d: 1">Del Valle de Lurín</span></span>
+        <span class="line"><span style="--d: 2">a tu mesa, <em>listo</em></span></span>
+        <span class="line"><span style="--d: 3"><em>para usar.</em></span></span>
+      </h1>
+      <p class="hero-lead hero-anim" style="--d: 4">
+        Cultivamos y seleccionamos hortalizas en nuestras chacras, y nos encargamos de la limpieza,
+        el corte y el empaque. Ensaladas y hojas verdes frescas, con agua de fuente propia y libres
+        de pesticidas.
+      </p>
+      <div class="hero-actions hero-anim" style="--d: 5">
+        <a href="#productos" class="btn btn-primary">Ver productos</a>
+        <a href="#contacto" class="btn btn-ghost">Contáctanos</a>
+      </div>
+    </div>
+
+    <div class="hero-media">
+      <div class="hero-frame">
+        <Picture
+          src={lechuga}
+          formats={['avif', 'webp']}
+          widths={[480, 720, 960, 1280, 1620]}
+          sizes="(max-width: 900px) 100vw, 50vw"
+          alt="Surcos de lechugas verdes y moradas en una chacra del Valle de Lurín"
+          loading="eager"
+          fetchpriority="high"
+        />
+      </div>
+      <div class="hero-badge" aria-hidden="true">
+        <span class="hero-badge-dot"></span>
+        Cosecha fresca del Valle de Lurín
       </div>
     </div>
   </div>
-</div>
+</section>

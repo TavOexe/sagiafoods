@@ -1,0 +1,45 @@
+---
+const pasos = [
+  {
+    titulo: 'Cultivo y selección',
+    texto: 'Cosechamos en chacras del Valle de Lurín, regadas con agua de fuente propia, y seleccionamos lo mejor de cada campaña.',
+  },
+  {
+    titulo: 'Limpieza',
+    texto: 'Lavamos y limpiamos cada hortaliza con cuidado antes de procesarla.',
+  },
+  {
+    titulo: 'Corte',
+    texto: 'Cortamos y preparamos las hojas y mezclas para que lleguen listas para usar.',
+  },
+  {
+    titulo: 'Empaque',
+    texto: 'Empacamos en envases 100% reciclables, hechos con material reciclado post consumo.',
+  },
+];
+---
+
+<section id="proceso" class="section section-alt">
+  <div class="container">
+    <header class="section-head" data-reveal>
+      <p class="eyebrow">Nuestro proceso</p>
+      <h2>Todo el proceso, en un solo lugar</h2>
+      <p class="section-lead">
+        Trabajamos directo con nuestras chacras, sin intermediarios. Así cuidamos la frescura y
+        mantenemos precios justos.
+      </p>
+    </header>
+
+    <ol class="steps">
+      {
+        pasos.map((paso, i) => (
+          <li class="step" data-reveal style={`--i: ${i}`}>
+            <span class="step-num">{String(i + 1).padStart(2, '0')}</span>
+            <h3>{paso.titulo}</h3>
+            <p>{paso.texto}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>

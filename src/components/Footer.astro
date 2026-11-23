@@ -1,29 +1,41 @@
 ---
-const enlaces = ['Inicio', 'Nosotros', 'Productos', 'Contacto', 'Webmail'];
-const redes = ['Facebook', 'Twitter', 'Instagram'];
+import { Image } from 'astro:assets';
+import logo from '../assets/images/logo.png';
+import { site } from '../data/site';
+
+const anio = new Date().getFullYear();
 ---
 
-<footer class="footer">
-  <div class="footer-content container">
-    <div class="link">
-      <h3>SagiaFoods Perú</h3>
-      <ul>
-        {enlaces.map((texto) => <li><a href="#">{texto}</a></li>)}
-      </ul>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <Image src={logo} alt="SagiaFoods" width={120} />
+      <p>Hortalizas frescas del Valle de Lurín, listas para usar.</p>
     </div>
-    <div class="link">
-      <h3>Contacto</h3>
-      <ul>
-        <li>Dirección: Av. 7 de Junio 534, Nueva Esperanza, VMT, Lima, Perú</li>
-        <li>Teléfono: +51 955 260 181</li>
-        <li>Email: sagia@sagiafoods.com</li>
+    <nav aria-label="Pie de página">
+      <ul class="footer-links">
+        <li><a href="#productos">Productos</a></li>
+        <li><a href="#proceso">Proceso</a></li>
+        <li><a href="#origen">Origen</a></li>
+        <li><a href="#contacto">Contacto</a></li>
       </ul>
-    </div>
-    <div class="link">
-      <h3>Redes Sociales</h3>
-      <ul>
-        {redes.map((red) => <li><a href="#">{red}</a></li>)}
-      </ul>
-    </div>
+    </nav>
+    <address class="footer-contact">
+      <a href={`mailto:${site.email}`}>{site.email}</a>
+      <a href={site.phoneHref}>{site.phone}</a>
+      <span>{site.address.district}, Lima</span>
+    </address>
+    {
+      site.social.length > 0 && (
+        <ul class="footer-social">
+          {site.social.map((s) => (
+            <li><a href={s.url} target="_blank" rel="noopener">{s.name}</a></li>
+          ))}
+        </ul>
+      )
+    }
+  </div>
+  <div class="container footer-bottom">
+    <p>© {anio} {site.name}. Todos los derechos reservados.</p>
   </div>
 </footer>

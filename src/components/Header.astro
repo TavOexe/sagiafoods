@@ -1,47 +1,63 @@
 ---
-import { Picture } from 'astro:assets';
-import Carrito from './Carrito.astro';
-import logo from '../assets/images/logo-header.png';
+import { Image } from 'astro:assets';
+import logo from '../assets/images/logo.png';
 
-const enlaces = ['Inicio', 'Nosotros', 'Productos', 'Contacto', 'Webmail'];
+const enlaces = [
+  { href: '#productos', texto: 'Productos' },
+  { href: '#proceso', texto: 'Proceso' },
+  { href: '#origen', texto: 'Origen' },
+];
 ---
 
-<header class="header">
-  <div class="menu">
-    <label for="menu">
-      <img
-        src="https://img.icons8.com/fluent-systems-regular/2x/menu-squared-2.png"
-        width="40"
-        height="40"
-        alt="menu"
-      />
-    </label>
+<header class="site-header" data-header>
+  <div class="container header-inner">
+    <a href="#inicio" class="brand" aria-label="SagiaFoods Perú, ir al inicio">
+      <Image src={logo} alt="SagiaFoods" width={124} loading="eager" />
+    </a>
 
-    <div class="logo-header">
-      <Picture
-        src={logo}
-        formats={['avif', 'webp']}
-        widths={[250, 500]}
-        sizes="250px"
-        alt="Logo SagiaFoods Perú"
-        loading="eager"
-      />
-      <a href="#" class="logo"> SagiaFoods Perú </a>
-    </div>
+    <button
+      class="menu-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="nav-principal"
+      data-menu-toggle
+    >
+      <span class="sr-only">Abrir menú</span>
+      <span class="menu-icon" aria-hidden="true"></span>
+    </button>
 
-    <input type="checkbox" id="menu" />
-    <nav class="navbar">
+    <nav id="nav-principal" class="site-nav" aria-label="Principal" data-nav>
       <ul>
-        {enlaces.map((texto) => <li><a href="#">{texto}</a></li>)}
+        {enlaces.map((e) => <li><a href={e.href}>{e.texto}</a></li>)}
       </ul>
+      <a href="#contacto" class="btn btn-primary btn-sm">Contáctanos</a>
     </nav>
-    <div>
-      <ul>
-        <Carrito />
-      </ul>
-    </div>
   </div>
-
-  <!-- El contenido principal de la cabecera (Hero) entra aquí para conservar el DOM original -->
-  <slot />
 </header>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-header]');
+  const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const nav = document.querySelector<HTMLElement>('[data-nav]');
+
+  function cerrar() {
+    header?.classList.remove('menu-abierto');
+    toggle?.setAttribute('aria-expanded', 'false');
+  }
+
+  toggle?.addEventListener('click', () => {
+    const abierto = header?.classList.toggle('menu-abierto') ?? false;
+    toggle.setAttribute('aria-expanded', String(abierto));
+  });
+  nav?.addEventListener('click', (e) => {
+    if ((e.target as HTMLElement).closest('a')) cerrar();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') cerrar();
+  });
+
+  // Sombra suave en la cabecera al hacer scroll.
+  const marcar = () => header?.classList.toggle('con-scroll', window.scrollY > 8);
+  marcar();
+  window.addEventListener('scroll', marcar, { passive: true });
+</script>

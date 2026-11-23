@@ -24,6 +24,10 @@ jobs:
 
       - name: Build con Astro y subir artefacto
         uses: withastro/action@v6
+        # Formulario de contacto (opcional): crea estas variables en Settings → Secrets and variables → Actions → Variables.
+        env:
+          PUBLIC_FORM_ENDPOINT: ${{ vars.PUBLIC_FORM_ENDPOINT }}
+          PUBLIC_FORM_ACCESS_KEY: ${{ vars.PUBLIC_FORM_ACCESS_KEY }}
         # Detecta npm por package-lock.json, usa Node 24 y sube dist/ como artefacto de Pages.
 
   deploy:

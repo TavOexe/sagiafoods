@@ -1,41 +1,67 @@
 ---
 import { Picture } from 'astro:assets';
-import pr1 from '../assets/images/productos/pr1.png';
-import pr2 from '../assets/images/productos/pr2.png';
-import pr3 from '../assets/images/productos/pr3.png';
-import pr4 from '../assets/images/productos/pr4.png';
-
-// pr5–pr8 también están en src/assets/images/productos/ (sin usar, igual que en el original).
-const productos = [
-  { id: '1', imagen: pr1, nombre: 'Producto', precio: 'S/. 15.00' },
-  { id: '2', imagen: pr2, nombre: 'Producto', precio: 'S/. 15.00' },
-  { id: '3', imagen: pr3, nombre: 'Producto', precio: 'S/. 15.00' },
-  { id: '4', imagen: pr4, nombre: 'Producto', precio: 'S/. 15.00' },
-];
+import { productos, fotoDe } from '../data/productos';
 ---
 
-<main class="products container" id="lista-1">
-  <h2>Productos destacados</h2>
-  <div class="product-content">
-    {
-      productos.map((p) => (
-        <div class="product">
-          <Picture
-            src={p.imagen}
-            formats={['avif', 'webp']}
-            widths={[200, 400, 500]}
-            sizes="(max-width: 700px) 90vw, 200px"
-            alt={p.nombre}
-          />
-          <div class="product-txt">
-            <h3>{p.nombre}</h3>
-            <p class="precio">{p.precio}</p>
-            <a href="#" class="agregar-carrito btn-2" data-id={p.id}>
-              Agregar
-            </a>
-          </div>
-        </div>
-      ))
-    }
+<section id="productos" class="section">
+  <div class="container">
+    <header class="section-head" data-reveal>
+      <p class="eyebrow">Productos</p>
+      <h2>Frescos, limpios y listos para servir</h2>
+      <p class="section-lead">
+        Ensaladas, hojas verdes y hortalizas cultivadas en el Valle de Lurín con agua de fuente
+        propia, libres de pesticidas y empacadas en envases 100% reciclables. Mantener refrigerado.
+      </p>
+    </header>
+
+    <ul class="pcards">
+      {
+        productos.map((p, i) => {
+          const foto = fotoDe(p.slug);
+          const lado = i % 2 === 0 ? 'izquierda' : 'derecha';
+          return (
+            <li
+              class:list={['pcard', `tinta-${p.tinta}`, `desde-${lado}`]}
+              style={`--c: ${p.color}`}
+              data-reveal
+            >
+              <div class:list={['pcard-media', { 'sin-foto': !foto }]}>
+                {foto ? (
+                  <Picture
+                    src={foto}
+                    formats={['avif', 'webp']}
+                    widths={[320, 480, 640, 900]}
+                    sizes="(max-width: 760px) 80vw, 340px"
+                    alt={`${p.nombre} ${p.linea} de SagiaFoods`}
+                  />
+                ) : (
+                  <span class="pcard-mark" aria-hidden="true">
+                    {p.nombre}
+                  </span>
+                )}
+              </div>
+              <div class="pcard-body">
+                <span class="pcard-cat">
+                  {String(i + 1).padStart(2, '0')} · {p.categoria}
+                </span>
+                <h3>{p.nombre}</h3>
+                <p class="pcard-line">{p.linea}</p>
+                <p class="pcard-desc">{p.descripcion}</p>
+                <ul class="pcard-features">
+                  {p.caracteristicas.map((c) => (
+                    <li>{c}</li>
+                  ))}
+                </ul>
+              </div>
+            </li>
+          );
+        })
+      }
+    </ul>
+
+    <p class="product-cta" data-reveal>
+      ¿Necesitas volúmenes para tu negocio o un producto específico?
+      <a href="#contacto">Escríbenos →</a>
+    </p>
   </div>
-</main>
+</section>

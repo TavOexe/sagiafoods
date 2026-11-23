@@ -1,10 +1,141 @@
 ---
-// Igual que el original: el formulario no envía a ningún lado (action vacío, input sin name).
+import { site } from '../data/site';
 ---
 
-<section class="contact container">
-  <form action="">
-    <input type="email" placeholder="Correo" aria-label="Correo" />
-    <input type="submit" class="btn-3" value="Enviar" />
-  </form>
+<section id="contacto" class="section section-alt">
+  <div class="container contact-grid">
+    <div class="contact-info" data-reveal>
+      <p class="eyebrow">Contacto</p>
+      <h2>Hablemos</h2>
+      <p class="section-lead">
+        Cuéntanos qué necesitas y te respondemos a la brevedad. Atendemos las 24 horas, los 7 días
+        de la semana, con entregas en Lima y alrededores.
+      </p>
+
+      <dl class="contact-list">
+        <div>
+          <dt>Correo</dt>
+          <dd><a href={`mailto:${site.email}`}>{site.email}</a></dd>
+        </div>
+        <div>
+          <dt>Teléfono</dt>
+          <dd><a href={site.phoneHref}>{site.phone}</a></dd>
+        </div>
+        <div>
+          <dt>Dirección</dt>
+          <dd>
+            <a href={site.mapsUrl} target="_blank" rel="noopener">{site.address.full}</a>
+          </dd>
+        </div>
+        <div>
+          <dt>Horario</dt>
+          <dd>Atención 24/7</dd>
+        </div>
+      </dl>
+    </div>
+
+    <form
+      class="contact-form"
+      data-reveal
+      data-contact-form
+      data-endpoint={site.form.endpoint}
+      data-access-key={site.form.accessKey}
+      data-email={site.email}
+      novalidate
+    >
+      <div class="field">
+        <label for="nombre">Nombre <span aria-hidden="true">*</span></label>
+        <input id="nombre" name="nombre" type="text" autocomplete="name" required />
+      </div>
+      <div class="field">
+        <label for="empresa">Empresa</label>
+        <input id="empresa" name="empresa" type="text" autocomplete="organization" />
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="correo">Correo <span aria-hidden="true">*</span></label>
+          <input id="correo" name="correo" type="email" autocomplete="email" required />
+        </div>
+        <div class="field">
+          <label for="telefono">Teléfono</label>
+          <input id="telefono" name="telefono" type="tel" autocomplete="tel" />
+        </div>
+      </div>
+      <div class="field">
+        <label for="mensaje">Mensaje <span aria-hidden="true">*</span></label>
+        <textarea id="mensaje" name="mensaje" rows="5" required></textarea>
+      </div>
+
+      <!-- Trampa anti-spam: invisible para personas. -->
+      <div class="hp" aria-hidden="true">
+        <label for="website">No llenar</label>
+        <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block">Enviar mensaje</button>
+      <p class="form-status" role="status" aria-live="polite" data-form-status></p>
+    </form>
+  </div>
 </section>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+  const estado = form?.querySelector<HTMLElement>('[data-form-status]');
+
+  function mostrar(texto: string, tipo: 'ok' | 'error' | '') {
+    if (!estado) return;
+    estado.textContent = texto;
+    estado.dataset.tipo = tipo;
+  }
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!form.checkValidity()) {
+      form.classList.add('validado');
+      form.querySelector<HTMLElement>(':invalid')?.focus();
+      mostrar('Revisa los campos marcados.', 'error');
+      return;
+    }
+
+    const datos = new FormData(form);
+    if (datos.get('website')) return; // bot
+    datos.delete('website');
+
+    const endpoint = form.dataset.endpoint;
+    const nombre = String(datos.get('nombre') ?? '');
+    const asunto = `Contacto web: ${nombre}`;
+
+    // Sin servicio configurado: abre el correo del visitante con el mensaje listo.
+    if (!endpoint) {
+      const cuerpo = [
+        `Nombre: ${nombre}`,
+        `Empresa: ${datos.get('empresa') || '-'}`,
+        `Correo: ${datos.get('correo')}`,
+        `Teléfono: ${datos.get('telefono') || '-'}`,
+        '',
+        String(datos.get('mensaje') ?? ''),
+      ].join('\n');
+      window.location.href = `mailto:${form.dataset.email}?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(cuerpo)}`;
+      mostrar('Abrimos tu aplicación de correo con el mensaje listo para enviar.', 'ok');
+      return;
+    }
+
+    const boton = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+    boton?.setAttribute('disabled', '');
+    mostrar('Enviando…', '');
+    if (form.dataset.accessKey) datos.append('access_key', form.dataset.accessKey);
+    datos.append('subject', asunto);
+
+    try {
+      const res = await fetch(endpoint, { method: 'POST', body: datos, headers: { Accept: 'application/json' } });
+      if (!res.ok) throw new Error(String(res.status));
+      form.reset();
+      form.classList.remove('validado');
+      mostrar('¡Gracias! Recibimos tu mensaje y te responderemos pronto.', 'ok');
+    } catch {
+      mostrar(`No se pudo enviar. Escríbenos a ${form.dataset.email}.`, 'error');
+    } finally {
+      boton?.removeAttribute('disabled');
+    }
+  });
+</script>

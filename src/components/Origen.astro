@@ -1,0 +1,46 @@
+---
+import { Picture } from 'astro:assets';
+import lechuga from '../assets/images/cultivos/cultivo-lechuga.jpg';
+import cebolla from '../assets/images/cultivos/cultivo-cebolla.jpg';
+import tomate from '../assets/images/cultivos/cultivo-tomate.jpg';
+import pimiento from '../assets/images/cultivos/cultivo-pimiento.jpg';
+import papa from '../assets/images/cultivos/cultivo-papa.jpg';
+
+const fotos = [
+  { src: papa, alt: 'Cultivo de papa en flor en una ladera', clase: 'g-a' },
+  { src: tomate, alt: 'Invernadero de tomates', clase: 'g-b' },
+  { src: cebolla, alt: 'Cultivo de cebolla junto a las dunas', clase: 'g-c' },
+  { src: pimiento, alt: 'Surcos de pimiento', clase: 'g-d' },
+  { src: lechuga, alt: 'Surcos de lechuga verde y morada', clase: 'g-e' },
+];
+---
+
+<section id="origen" class="section">
+  <div class="container">
+    <header class="section-head" data-reveal>
+      <p class="eyebrow">Origen</p>
+      <h2>Nuestras chacras</h2>
+      <p class="section-lead">
+        Todo empieza en el campo. Estas son algunas de las chacras proveedoras donde cultivamos
+        cebolla, tomate, pimiento, papa y lechuga.
+      </p>
+    </header>
+
+    <div class="gallery">
+      {
+        fotos.map((f) => (
+          <figure class:list={['gallery-item', f.clase]} data-reveal>
+            <Picture
+              src={f.src}
+              formats={['avif', 'webp']}
+              widths={[400, 640, 960, 1280]}
+              sizes="(max-width: 700px) 100vw, 50vw"
+              alt={f.alt}
+            />
+            <figcaption>{f.alt}</figcaption>
+          </figure>
+        ))
+      }
+    </div>
+  </div>
+</section>
