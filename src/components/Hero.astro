@@ -1,0 +1,50 @@
+---
+import { Picture } from 'astro:assets';
+import cebolla from '../assets/images/cultivos/cultivo-cebolla.jpg';
+import tomate from '../assets/images/cultivos/cultivo-tomate.jpg';
+import pimiento from '../assets/images/cultivos/cultivo-pimiento.jpg';
+import papa from '../assets/images/cultivos/cultivo-papa.jpg';
+
+// El original tenía un 5.º slide con "PLANTIN DE TOMATE.JPG", que no existe en el repo.
+// Para añadirlo: copia la foto a src/assets/images/cultivos/, impórtala y agrégala aquí.
+const slides = [
+  { src: cebolla, alt: 'Cultivo de cebolla' },
+  { src: tomate, alt: 'Cultivo de tomate' },
+  { src: pimiento, alt: 'Cultivo de pimiento' },
+  { src: papa, alt: 'Cultivo de papa' },
+];
+---
+
+<div class="header-content container">
+  <div class="header-txt">
+    <span>Ofertas</span>
+    <h1>Verduras de calidad</h1>
+    <p>
+      SagiaFoods Perú es una empresa líder en la venta de hortalizas y verduras de alta calidad,
+      directamente desde los campos de Perú. Nos enorgullecemos de ofrecer productos frescos y
+      nutritivos a nuestros clientes en Lima y sus alrededores.
+    </p>
+    <a href="#" class="btn-1">Información</a>
+  </div>
+  <div class="header-img">
+    <div class="slider">
+      <div class="slides">
+        {
+          slides.map((slide, i) => (
+            <div id={`slide-${i + 1}`}>
+              <Picture
+                src={slide.src}
+                formats={['avif', 'webp']}
+                widths={[300, 600]}
+                sizes="300px"
+                alt={slide.alt}
+                loading={i === 0 ? 'eager' : 'lazy'}
+                fetchpriority={i === 0 ? 'high' : 'auto'}
+              />
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</div>

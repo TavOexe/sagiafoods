@@ -1,0 +1,29 @@
+---
+import { Picture } from 'astro:assets';
+import cebolla from '../assets/images/cultivos/cultivo-cebolla.jpg';
+import lechuga from '../assets/images/cultivos/cultivo-lechuga.jpg';
+import papa from '../assets/images/cultivos/cultivo-papa.jpg';
+
+const cultivos = [
+  { clase: 'service-1', src: cebolla, alt: 'Cultivo de cebolla' },
+  { clase: 'service-2', src: lechuga, alt: 'Cultivo de lechuga' },
+  { clase: 'service-3', src: papa, alt: 'Cultivo de papa' },
+];
+---
+
+<section class="service">
+  {
+    cultivos.map((c) => (
+      <div class={c.clase}>
+        <Picture
+          class="store"
+          src={c.src}
+          formats={['avif', 'webp']}
+          widths={[400, 700, 1050, 1400]}
+          sizes="(max-width: 700px) 100vw, 700px"
+          alt={c.alt}
+        />
+      </div>
+    ))
+  }
+</section>

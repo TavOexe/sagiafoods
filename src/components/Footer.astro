@@ -1,0 +1,29 @@
+---
+const enlaces = ['Inicio', 'Nosotros', 'Productos', 'Contacto', 'Webmail'];
+const redes = ['Facebook', 'Twitter', 'Instagram'];
+---
+
+<footer class="footer">
+  <div class="footer-content container">
+    <div class="link">
+      <h3>SagiaFoods Perú</h3>
+      <ul>
+        {enlaces.map((texto) => <li><a href="#">{texto}</a></li>)}
+      </ul>
+    </div>
+    <div class="link">
+      <h3>Contacto</h3>
+      <ul>
+        <li>Dirección: Av. 7 de Junio 534, Nueva Esperanza, VMT, Lima, Perú</li>
+        <li>Teléfono: +51 955 260 181</li>
+        <li>Email: sagia@sagiafoods.com</li>
+      </ul>
+    </div>
+    <div class="link">
+      <h3>Redes Sociales</h3>
+      <ul>
+        {redes.map((red) => <li><a href="#">{red}</a></li>)}
+      </ul>
+    </div>
+  </div>
+</footer>
